@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Zahlenraten</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #03fc35, #f702da);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 1rem;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    button {
+      background-color: #86d6ef;
+      cursor: pointer;
+    }
+
+    #feedback {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Zahlenraten</h1>
+  <p>Rate eine Zahl von 1 bis <span id="grenzeAnzeige">100</span></p>
+
+  <input type="number" id="rateInput" placeholder="Deine Zahl">
+  <button id="rateButton">Rate!</button>
+  <p id="feedback"></p>
+  <p id="zaehler">Versuche: 0</p>
+  <button id="restartButton">Neustart</button>
+
+  <script>
+    let oberGrenze = 100;
+    let geheimzahl;
+    let versuchZaehler = 0;
+
+    const input = document.getElementById("rateInput");
+    const rateButton = document.getElementById("rateButton");
+    const restartButton = document.getElementById("restartButton");
+    const feedback = document.getElementById("feedback");
+    const zaehler = document.getElementById("zaehler");
+
+    function spielStarten() {
+      geheimzahl = Math.round(Math.random() * oberGrenze + 1);
+      versuchZaehler = 0;
+      input.value = "";
+      input.disabled = false;
+      rateButton.disabled = false;
+      feedback.textContent = "";
+      zaehler.textContent = "Versuche: 0";
+    }
+
+    spielStarten(); // Spiel beim Laden starten
+
+    rateButton.addEventListener("click", function () {
+      let rateVersuch = parseInt(input.value);
+
+      if (isNaN(rateVersuch)) {
+        feedback.textContent = "Bitte gib eine gültige Zahl ein.";
+        return;
+      }
+
+      versuchZaehler++;
+      zaehler.textContent = "Versuche: " + versuchZaehler;
+
+      if (rateVersuch > geheimzahl) {
+        feedback.textContent = "Deine Zahl ist zu groß.";
+      } else if (rateVersuch < geheimzahl) {
+        feedback.textContent = "Deine Zahl ist zu klein.";
+      } else {
+        feedback.textContent = "Richtig geraten! Du hast " + versuchZaehler + " Versuche gebraucht.";
+        input.disabled = true;
+        rateButton.disabled = true;
+      }
+    });
+
+    restartButton.addEventListener("click", function () {
+      spielStarten();
+    });
+  </script>
+</body>
+</html>
